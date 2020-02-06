@@ -1,10 +1,20 @@
 # Flask API based on the queries previously developed
 from flask import Flask, jsonify
 
-app = Flask(__name__)
+# Python SQL toolkit and Object Relational Mapper
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, func, distinct
 
-precipitation_df = pd.Dataframe({
-    hawaii_dropna["Date"]:hawaii_dropna["Precipitation"]})
+# Engine to connect to sqlite database
+engine = create_engine("sqlite:///c:/Users/User/Documents/hawaii.sqlite")
+Base = automap_base()
+Base.prepare(engine, reflect=True)
+Measurement = Base.classes.measurement
+Station = Base.classes.station
+
+app = Flask(__name__)
 
 @app.route("/")
 def welcome():
@@ -20,7 +30,7 @@ def precipitation():
 @app.route("/api/v1.0/stations")
 def station():
     """Return json list of stations from the dataset"""
-    
+
 
 @app.route("/api/v1.0/tobs")
 
