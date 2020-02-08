@@ -76,13 +76,31 @@ def observations():
     return jsonify(hawaii_tobs)
 
 @app.route("/api/v1.0/<start>")
+def start_date(start=none):
+    session = Session(query)
+    """Return json list of max, min, and avg temperature for given start range"""
+
+    # Select statement
+    sel = [func.max(Measurement.tobs), func.min(Measurement.tobs, func.avg(Measurement.tobs)]
+
+    stats = session.query(*sel).filter(Measurement.date > start)).all()
+
+    # returns flattened 1D array of temperature statistics
+    temps = list(np.ravel(stats))
+    return jsonify(temps)
+
 @app.route("/api/v1.0/<start>/<end>")
-def start_end(start=none, end=none):
+def end_date(end=none):
     # session from python to database
     session = Session(query)
 
     """Return json list of max, min, and avg temperature for given start or start-end range"""
     station_stats = session.query(Measurement.station, func.max     (Measurement.tobs), func.min(Measurement.tobs), func.avg(Measurement.tobs)).group_by(Measurement.station).all()
+
+    # Select statement
+    sel = [func.max(Measurement.tobs), func.min(Measurement.tobs, func.avg(Measurement.tobs)]
+
+    stats = session.query(*sel).filter(Measurement.date > start)).all()
 
     session.close()
 
