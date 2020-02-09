@@ -102,7 +102,7 @@ def end_date(end=none):
     # Select statement
     sel = [func.max(Measurement.tobs), func.min(Measurement.tobs, func.avg(Measurement.tobs)]
 
-    stats = session.query(*sel).filter(Measurement.date < start)).filter(Measurement.date > end).all()
+    stats = session.query(*sel).filter(Measurement.date > start)).filter(Measurement.date < end).all()
 
     session.close()
 
