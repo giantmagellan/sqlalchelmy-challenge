@@ -85,6 +85,8 @@ def start_date(start=none):
 
     stats = session.query(*sel).filter(Measurement.date > start)).all()
 
+    session.close()
+
     # returns flattened 1D array of temperature statistics
     temps = list(np.ravel(stats))
     return jsonify(temps)
@@ -100,11 +102,13 @@ def end_date(end=none):
     # Select statement
     sel = [func.max(Measurement.tobs), func.min(Measurement.tobs, func.avg(Measurement.tobs)]
 
-    stats = session.query(*sel).filter(Measurement.date > start)).all()
+    stats = session.query(*sel).filter(Measurement.date < start)).filter(Measurement.date > end).all()
 
     session.close()
 
-    return jsonify()
+    # returns flattened 1D array of temperature statistics
+    temps = list(np.ravel(stats))
+    return jsonify(temps)
 
 if __name__ == '__main__':
     app.run(debug=True)
